@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Феникс — демонстрационная концепция сайта</title>
+    <meta name="description" content="Демонстрационная концепция сайта компании «Феникс»: металлообработка, изготовление РВД, металлоконструкций и продажа гидравлического оборудования.">
+    <meta name="theme-color" content="#1E1E1E">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Феникс — концепция сайта">
+    <meta property="og:description" content="Демонстрационная концепция сайта для предварительного ознакомления.">
+    <meta property="og:locale" content="ru_RU">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔧</text></svg>">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
+        
+        :root {
+            --bg-dark: #1E1E1E;
+            --bg-darker: #151515;
+            --accent: #FF6B00;
+            --accent-hover: #E65C00;
+            --text-light: #F5F5F7;
+            --text-muted: #A0A0A0;
+            --card-bg: #2A2A2A;
+            --border-color: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-dark); color: var(--text-light); line-height: 1.6; overflow-x: hidden; }
+        body.modal-open { overflow: hidden; }
+        h1, h2, h3, h4 { font-family: 'Roboto Condensed', sans-serif; text-transform: uppercase; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .btn { display: inline-block; background: var(--accent); color: #fff; padding: 15px 30px; font-weight: bold; text-transform: uppercase; border: none; cursor: pointer; transition: 0.3s; font-size: 16px; text-align: center; }
+        .btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+        .btn-outline:hover { background: var(--accent); color: #fff; }
+
+        /* Фокус для доступности */
+        button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+            outline: 2px solid #FF6B00;
+            outline-offset: 3px;
+        }
+
+        /* Прокрутка к разделам с учётом липкой шапки */
+        section[id] {
+            scroll-margin-top: 110px;
+        }
+        #top {
+            scroll-margin-top: 0;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* Плашка «Демонстрационная концепция» */
+        .demo-notice {
+            background: #2b2015;
+            color: #f0c18b;
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 12px;
+            border-bottom: 1px solid #8c5a2b;
+            line-height: 1.6;
+        }
+
+        /* ШАПКА */
+        header { background: var(--bg-darker); border-bottom: 3px solid var(--accent); padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .logo { font-size: 32px; font-weight: 700; color: #fff; letter-spacing: 2px; }
+        .logo span { color: var(--accent); }
+        .header-info { display: flex; align-items: center; gap: 25px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+        .header-info span { color: var(--text-muted); }
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn-callback { font-size: 13px; padding: 10px 20px; white-space: nowrap; }
+
+        /* Бургер-меню */
+        .burger { display: none; cursor: pointer; flex-direction: column; gap: 5px; background: none; border: none; padding: 5px; }
+        .burger span { width: 25px; height: 3px; background: #fff; display: block; }
+        .mobile-menu { display: none; }
+
+        /* ГЛАВНЫЙ ЭКРАН */
+        .hero { position: relative; background: linear-gradient(rgba(30, 30, 30, 0.85), rgba(30, 30, 30, 0.85)), url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80') center/cover; padding: 100px 0; }
+        .hero h1 { font-size: 56px; line-height: 1.1; margin-bottom: 20px; max-width: 900px; }
+        .hero h1 span { color: var(--accent); }
+        .hero p { font-size: 22px; color: var(--text-muted); max-width: 700px; margin-bottom: 25px; }
+        .hero-description {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 700px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        .hero-btns { display: flex; gap: 20px; flex-wrap: wrap; }
+
+        /* О КОМПАНИИ / ГАЛЕРЕЯ */
+        .about { padding: 80px 0; background: var(--bg-dark); }
+        .about-text { max-width: 800px; margin: 0 auto 30px; text-align: center; color: var(--text-muted); font-size: 17px; }
+        .section-description {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 15px;
+            font-style: italic;
+        }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 40px; }
+        .gallery-item { position: relative; height: 280px; overflow: hidden; border: 1px solid #333; cursor: pointer; display: block; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .gallery-item::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%); transition: 0.3s; }
+        .gallery-item:hover::after { background: linear-gradient(to top, rgba(255,107,0,0.7) 0%, transparent 60%); }
+        .gallery-caption { position: absolute; bottom: 0; left: 0; z-index: 2; padding: 20px; font-weight: bold; font-size: 16px; color: #fff; }
+
+        /* УСЛУГИ */
+        .services { padding: 80px 0; background: var(--bg-darker); }
+        .section-title { font-size: 42px; margin-bottom: 15px; text-align: center; }
+        .section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 50px; font-size: 18px; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .service-card { background: var(--card-bg); padding: 40px 30px; border-bottom: 3px solid transparent; transition: 0.4s; display: flex; flex-direction: column; }
+        .service-card:hover { border-bottom-color: var(--accent); transform: translateY(-5px); background: #333; }
+        .service-card h3 { font-size: 22px; margin-bottom: 15px; color: #fff; }
+        .service-card p { color: var(--text-muted); font-size: 15px; margin-bottom: 20px; flex: 1; }
+        .service-link { color: var(--accent); font-weight: 500; font-size: 14px; text-decoration: underline; }
+        .service-link:hover { color: var(--accent-hover); }
+
+        /* ПРЕИМУЩЕСТВА */
+        .features { padding: 80px 0; background: var(--bg-dark); }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .feature-card { background: var(--card-bg); padding: 30px; border-left: 4px solid var(--accent); }
+        .feature-card h3 { font-size: 20px; margin-bottom: 15px; color: #fff; }
+        .feature-card p { color: var(--text-muted); font-size: 15px; }
+
+        /* ИЗГОТОВЛЕНИЕ ПО ЧЕРТЕЖАМ */
+        .drawings { padding: 80px 0; background: var(--bg-darker); text-align: center; }
+        .drawings-box { background: var(--card-bg); max-width: 800px; margin: 0 auto; padding: 50px; border-top: 4px solid var(--accent); }
+        .drawings-box h2 { font-size: 32px; margin-bottom: 20px; }
+        .drawings-box p { color: var(--text-muted); margin-bottom: 20px; font-size: 16px; }
+        .drawing-upload { margin-top: 30px; text-align: left; }
+        .drawing-upload label { display: block; margin-bottom: 10px; font-weight: 500; color: #fff; }
+        .drawing-upload input[type="file"] { display: block; width: 100%; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; margin-bottom: 15px; }
+        .drawing-upload p { font-size: 13px; color: var(--text-muted); margin: 0; }
+
+        /* ОТЗЫВЫ */
+        .reviews { padding: 80px 0; background: var(--bg-dark); text-align: center; }
+        .reviews-links { display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
+        .review-btn { display: flex; align-items: center; gap: 10px; background: var(--card-bg); padding: 15px 30px; border-radius: 5px; border: 1px solid var(--border-color); font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .review-btn:hover { background: #333; border-color: var(--accent); transform: translateY(-2px); }
+        .review-btn.review-btn-yandex { color: #FF0000; }
+        .review-btn.review-btn-2gis { color: #00A82D; }
+
+        /* FAQ */
+        .faq { padding: 80px 0; background: var(--bg-darker); }
+        .faq-grid { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: var(--card-bg); margin-bottom: 15px; border-radius: 4px; overflow: hidden; }
+        .faq-question { width: 100%; padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 500; transition: 0.3s; background: none; border: none; color: var(--text-light); font-size: 16px; text-align: left; font-family: 'Roboto', sans-serif; }
+        .faq-question:hover { background: #333; }
+        .faq-question::after { content: '+'; font-size: 24px; color: var(--accent); transition: 0.3s; }
+        .faq-item.active .faq-question::after { content: '−'; }
+        .faq-answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease-out, padding 0.3s ease-out; padding: 0 20px; color: var(--text-muted); }
+        .faq-answer > div { overflow: hidden; }
+        .faq-item.active .faq-answer { grid-template-rows: 1fr; padding-bottom: 20px; }
+
+        /* КОНТАКТЫ */
+        .contacts { padding: 80px 0; background: var(--bg-dark); }
+        .contacts-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .contact-info-box { background: var(--card-bg); padding: 40px; border-top: 4px solid var(--accent); }
+        .contact-info-box h3 { font-size: 28px; margin-bottom: 25px; color: #fff; }
+        .info-block { margin-bottom: 20px; }
+        .info-block p { color: var(--text-muted); font-size: 14px; margin-bottom: 5px; }
+        .requisites { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color); font-size: 14px; color: var(--text-muted); }
+        
+        .contact-form-box { background: var(--card-bg); padding: 40px; border-top: 4px solid var(--accent); }
+        .contact-form-box h3 { font-size: 28px; margin-bottom: 15px; color: #fff; }
+        .contact-form-box p { color: var(--text-muted); margin-bottom: 20px; font-size: 15px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 15px; background: #1a1a1a; border: 1px solid #444; color: #fff; font-family: 'Roboto', sans-serif; font-size: 16px; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+        .form-group input.error, .form-group textarea.error { border-color: #ff3b30; }
+        .privacy-check { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+        .privacy-check input { width: auto; margin-top: 4px; }
+        .privacy-check a { color: var(--accent); text-decoration: underline; }
+        .form-note { font-size: 12px; color: var(--text-muted); margin-top: 12px; margin-bottom: 0; line-height: 1.5; }
+
+        /* КАРТА */
+        .map-container { margin-top: 40px; }
+        .map-container iframe { width: 100%; height: 400px; background: #333; border: 1px solid #444; filter: invert(90%) hue-rotate(180deg); }
+        .map-note { font-size: 12px; color: var(--text-muted); margin-top: 10px; text-align: center; }
+
+        /* ПОДВАЛ */
+        footer { background: var(--bg-darker); padding: 50px 0 20px; border-top: 1px solid #333; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .footer-col h4 { color: #fff; font-size: 18px; margin-bottom: 15px; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: var(--text-muted); font-size: 14px; }
+        .footer-col ul li a:hover { color: var(--accent); }
+        .footer-col p { color: var(--text-muted); font-size: 14px; margin-bottom: 10px; }
+        .footer-bottom { text-align: center; border-top: 1px solid #333; padding-top: 20px; color: var(--text-muted); font-size: 13px; }
+        .footer-bottom a { color: var(--text-muted); text-decoration: underline; margin: 0 5px; }
+        .footer-bottom a:hover { color: var(--accent); }
+
+        /* Плавающая кнопка */
+        .float-whatsapp { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: #fff; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000; transition: 0.3s; border: none; cursor: pointer; }
+        .float-whatsapp:hover { transform: scale(1.1); }
+        .float-whatsapp svg { width: 32px; height: 32px; fill: currentColor; }
+
+        /* МОДАЛЬНОЕ ОКНО */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: var(--card-bg); padding: 40px; width: 100%; max-width: 450px; border-top: 4px solid var(--accent); position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 20px; font-size: 30px; color: var(--text-muted); cursor: pointer; transition: 0.3s; background: none; border: none; }
+        .modal-close:hover { color: var(--accent); }
+        .modal-content h3 { font-size: 24px; margin-bottom: 15px; color: #fff; }
+        .modal-content p { color: var(--text-muted); margin-bottom: 20px; font-size: 14px; }
+
+        /* ЛАЙТБОКС */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
+        #lightbox .lightbox-close { position: absolute; top: 20px; right: 40px; color: #fff; font-size: 40px; cursor: pointer; background: none; border: none; }
+        #lightbox img { max-width: 90%; max-height: 80%; border: 2px solid var(--accent); }
+        #lightbox p { color: #fff; margin-top: 20px; font-size: 18px; text-align: center; }
+
+        /* Сообщение об успехе/ошибке формы */
+        .form-message { display: none; padding: 15px; margin-bottom: 20px; border-radius: 4px; font-size: 15px; }
+        .form-message.success { display: block; background: rgba(0, 168, 45, 0.15); border-left: 4px solid #00A82D; color: #00A82D; }
+        .form-message.error { display: block; background: rgba(255, 59, 48, 0.15); border-left: 4px solid #ff3b30; color: #ff3b30; }
+
+        /* АДАПТИВ */
+        @media (max-width: 900px) {
+            .contacts-wrapper { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 38px; }
+            .header-info { display: none; }
+            .burger { display: flex; }
+            .mobile-menu { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-darker); padding: 20px; flex-direction: column; gap: 15px; border-bottom: 2px solid var(--accent); z-index: 99; }
+            .mobile-menu.active { display: flex; }
+            .mobile-menu a { color: #fff; font-size: 16px; padding: 10px 0; border-bottom: 1px solid #333; }
+
+            .header-inner { flex-wrap: nowrap; gap: 10px; }
+            .logo { font-size: 25px; }
+            .header-actions { flex: 1; justify-content: flex-end; gap: 10px; }
+            .header-actions .btn-callback { font-size: 11px; padding: 9px 10px; }
+            .burger { flex-shrink: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .header-actions .btn-callback { font-size: 10px; padding: 9px 8px; }
+            .logo { font-size: 22px; }
+            .modal-overlay { padding: 12px; overflow-y: auto; align-items: flex-start; }
+            .modal-content { width: 100%; max-width: 450px; max-height: calc(100vh - 24px); overflow-y: auto; margin: auto; }
+            #lightbox { padding: 12px; }
+            #lightbox img { max-width: 100%; max-height: 75vh; object-fit: contain; }
+            input, textarea, select, button { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="demo-notice">
+        <strong>ДЕМОНСТРАЦИОННАЯ КОНЦЕПЦИЯ САЙТА</strong><br>
+        Проект подготовлен для предварительного ознакомления.
+        Контактные данные, сведения о компании, фотографии,
+        отзывы и другие материалы будут добавлены или уточнены
+        после согласования с представителями компании.
+    </div>
+
+    <!-- ШАПКА -->
+    <header id="top">
+        <div class="container header-inner">
+            <a href="#top" class="logo">ФЕНИКС<span>.</span></a>
+            
+            <div class="header-info">
+                <span>Адрес: будет подтверждён после согласования.</span>
+                <span>График: будет уточнён после согласования.</span>
+            </div>
+            
+            <div class="header-actions">
+                <button type="button" onclick="openModal()" class="btn btn-callback">Обратный звонок</button>
+            </div>
+            
+            <button type="button" class="burger" onclick="toggleMenu()" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        
+        <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильное меню">
+            <a href="#about">О компании</a>
+            <a href="#services">Услуги</a>
+            <a href="#drawings">По чертежам</a>
+            <a href="#reviews">Отзывы</a>
+            <a href="#faq">Вопрос-ответ</a>
+            <a href="#contacts">Контакты</a>
+        </nav>
+    </header>
+
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <section class="hero">
+        <div class="container">
+            <h1>Металлообработка <br>и гидравлика <span>в Уфе</span></h1>
+            <p class="hero-description">
+                Решения в области металлообработки, гидравлики
+                и изготовления металлических изделий.
+                Подробности о возможностях производства будут
+                уточнены после согласования с компанией.
+            </p>
+            <div class="hero-btns">
+                <a href="#contacts" class="btn">Обсудить задачу</a>
+                <a href="#services" class="btn btn-outline">Посмотреть услуги</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- О КОМПАНИИ / ГАЛЕРЕЯ -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">О компании</h2>
+            <p class="about-text">
+                Компания «Феникс» — это современное производство в Уфе. Мы специализируемся на металлообработке, 
+                изготовлении деталей по чертежам, продаже гидравлического оборудования и резинотехнических изделий (РТИ). 
+                Наши клиенты — строительные организации, промышленные предприятия и частные лица. 
+                Мы работаем с наличным и безналичным расчётом.
+            </p>
+            
+            <h3 style="text-align:center; margin-top:40px; margin-bottom:20px; color:#fff; font-size: 24px;">Примеры наших работ</h3>
+            
+            <p class="section-description">
+                Фотографии производства, оборудования и выполненных работ
+                будут добавлены после согласования с компанией.
+            </p>
+            
+            <div class="gallery-grid">
+                <a href="https://i.ibb.co/3sXqB7Z/1.jpg" class="gallery-item" onclick="openLightbox(event, 'https://i.ibb.co/3sXqB7Z/1.jpg', 'Изготовление гидравлических узлов')">
+                    <img src="https://i.ibb.co/3sXqB7Z/1.jpg" alt="Иллюстрация металлообработки" loading="lazy" decoding="async">
+                    <div class="gallery-caption">Изготовление гидравлических узлов</div>
+                </a>
+                <a href="https://i.ibb.co/L5D8bB1/2.jpg" class="gallery-item" onclick="openLightbox(event, 'https://i.ibb.co/L5D8bB1/2.jpg', 'Фрезеровка фланцев и дисков')">
+                    <img src="https://i.ibb.co/L5D8bB1/2.jpg" alt="Иллюстрация фрезеровки" loading="lazy" decoding="async">
+                    <div class="gallery-caption">Фрезеровка фланцев и дисков</div>
+                </a>
+                <a href="https://i.ibb.co/5G6yW1K/3.jpg" class="gallery-item" onclick="openLightbox(event, 'https://i.ibb.co/5G6yW1K/3.jpg', 'Сварные металлоконструкции')">
+                    <img src="https://i.ibb.co/5G6yW1K/3.jpg" alt="Иллюстрация сварных конструкций" loading="lazy" decoding="async">
+                    <div class="gallery-caption">Сварные металлоконструкции</div>
+                </a>
+                <a href="https://i.ibb.co/9qQxQxQ/4.jpg" class="gallery-item" onclick="openLightbox(event, 'https://i.ibb.co/9qQxQxQ/4.jpg', 'Рукава высокого давления (РВД)')">
+                    <img src="https://i.ibb.co/9qQxQxQ/4.jpg" alt="Иллюстрация РВД" loading="lazy" decoding="async">
+                    <div class="gallery-caption">Рукава высокого давления (РВД)</div>
+                </a>
+                <a href="https://i.ibb.co/xL4tC8V/5.jpg" class="gallery-item" onclick="openLightbox(event, 'https://i.ibb.co/xL4tC8V/5.jpg', 'Сборка крупногабаритных узлов')">
+                    <img src="https://i.ibb.co/xL4tC8V/5.jpg" alt="Иллюстрация сборки узлов" loading="lazy" decoding="async">
+                    <div class="gallery-caption">Сборка крупногабаритных узлов</div>
+                </a>
+                <a href="https://i.ibb.co/2M4tF5J/6.jpg" class="gallery-item" onclick="openLightbox(event, 'https://i.ibb.co/2M4tF5J/6.jpg', 'Изготовление корпусных деталей')">
+                    <img src="https://i.ibb.co/2M4tF5J/6.jpg" alt="Иллюстрация изготовления деталей" loading="lazy" decoding="async">
+                    <div class="gallery-caption">Изготовление корпусных деталей</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- УСЛУГИ -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title">Наши услуги</h2>
+            <p class="section-subtitle">Полный цикл работ: от резки металла до сборки сложных узлов</p>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Плазменная резка</h3>
+                    <p>Высокоточная резка металла любой толщины. Раскрой листового металла по вашим эскизам.</p>
+                    <a href="#contacts" class="service-link">Уточнить возможность выполнения</a>
+                </div>
+                <div class="service-card">
+                    <h3>Фрезеровка</h3>
+                    <p>Обработка деталей на станках ЧПУ, изготовление корпусных деталей, фланцев, втулок.</p>
+                    <a href="#contacts" class="service-link">Уточнить возможность выполнения</a>
+                </div>
+                <div class="service-card">
+                    <h3>Изготовление РВД</h3>
+                    <p>Рукава высокого давления под любые задачи. Продажа гидравлического оборудования и РТИ.</p>
+                    <a href="#contacts" class="service-link">Уточнить возможность выполнения</a>
+                </div>
+                <div class="service-card">
+                    <h3>Металлоконструкции</h3>
+                    <p>Изготовление металлоконструкций, сварка ответственных узлов, гибка металла.</p>
+                    <a href="#contacts" class="service-link">Уточнить возможность выполнения</a>
+                </div>
+                <div class="service-card">
+                    <h3>Продажа гидравлики</h3>
+                    <p>Гидравлическое оборудование, инструмент и комплектующие в наличии и под заказ.</p>
+                    <a href="#contacts" class="service-link">Уточнить возможность выполнения</a>
+                </div>
+                <div class="service-card">
+                    <h3>Продажа РТИ</h3>
+                    <p>Резинотехнические изделия: манжеты, уплотнители, сальники, прокладки, шланги.</p>
+                    <a href="#contacts" class="service-link">Уточнить возможность выполнения</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПРЕИМУЩЕСТВА -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Почему выбирают нас</h2>
+            <p class="section-subtitle">Информация о производстве и возможностях компании будет уточнена после согласования.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Индивидуальный подход</h3>
+                    <p>Возможность обсуждения технического задания и требований к будущему изделию.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Работа с чертежами</h3>
+                    <p>Условия изготовления по чертежам будут уточнены после согласования.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Комплексные решения</h3>
+                    <p>Возможности предоставления различных услуг будут подтверждены компанией.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Для частных и корпоративных заказчиков</h3>
+                    <p>Форматы сотрудничества будут уточнены после согласования с компанией.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ИЗГОТОВЛЕНИЕ ПО ЧЕРТЕЖАМ -->
+    <section class="drawings" id="drawings">
+        <div class="container">
+            <div class="drawings-box">
+                <h2 class="section-title" style="font-size: 32px;">Изготовление по чертежам</h2>
+                <p>Отправьте нам ваш чертёж или техническое задание — мы рассчитаем стоимость и сроки изготовления. Принимаем файлы в форматах DWG, PDF и другие.</p>
+                <a href="#contacts" class="btn">Обсудить задачу</a>
+                
+                <div class="drawing-upload">
+                    <label for="drawing-files">Прикрепить чертежи или техническую документацию</label>
+                    <input type="file" id="drawing-files" accept=".pdf,.dwg,.dxf,.jpg,.jpeg,.png" multiple>
+                    <p id="drawing-file-status">
+                        Допустимые форматы: PDF, DWG, DXF, JPG, PNG.
+                        Максимальный размер одного файла — 10 МБ.
+                        Демонстрационный режим: файлы не загружаются
+                        и не сохраняются.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ОТЗЫВЫ -->
+    <section class="reviews" id="reviews">
+        <div class="container">
+            <h2 class="section-title">Наши отзывы</h2>
+            <p class="section-description">
+                Ссылки на официальные площадки с отзывами и подтверждённые
+                отзывы клиентов будут добавлены после согласования с компанией.
+            </p>
+            <div class="reviews-links">
+                <a href="#" class="review-btn review-btn-2gis" onclick="alert('Ссылки на официальные площадки будут добавлены после согласования с компанией.'); return false;">Мы на 2ГИС</a>
+                <a href="#" class="review-btn review-btn-yandex" onclick="alert('Ссылки на официальные площадки будут добавлены после согласования с компанией.'); return false;">Мы на Яндекс.Картах</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2 class="section-title">Часто задаваемые вопросы</h2>
+            <p class="section-subtitle">Ответы на вопросы, которые задают наши клиенты</p>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">Можно ли изготовить изделие по чертежу?</button>
+                    <div class="faq-answer"><div>Возможность изготовления, требования к документации и технические условия будут уточнены после согласования с компанией.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">Какие сроки изготовления?</button>
+                    <div class="faq-answer"><div>Сроки рассчитываются индивидуально в зависимости от изделия и производственных возможностей. Конкретные условия будут подтверждены компанией.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">Предоставляется ли гарантия?</button>
+                    <div class="faq-answer"><div>Условия гарантии на работы и оборудование будут уточнены после согласования.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false">Какие способы оплаты доступны?</button>
+                    <div class="faq-answer"><div>Способы оплаты и условия сотрудничества будут подтверждены компанией.</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- КОНТАКТЫ -->
+    <section class="contacts" id="contacts">
+        <div class="container">
+            <h2 class="section-title" style="text-align:left; margin-bottom:30px;">Контакты</h2>
+            <div class="contacts-wrapper">
+                <div class="contact-info-box">
+                    <h3>Свяжитесь с нами</h3>
+                    
+                    <div class="info-block">
+                        <p>Адрес: будет подтверждён после согласования с компанией.</p>
+                    </div>
+                    
+                    <div class="info-block">
+                        <p>Телефон: будет добавлен после согласования.</p>
+                    </div>
+                    
+                    <div class="info-block">
+                        <p>График работы: будет уточнён после согласования.</p>
+                    </div>
+
+                    <div class="info-block">
+                        <p>WhatsApp и Telegram: ссылки будут добавлены после согласования.</p>
+                    </div>
+
+                    <div class="requisites">
+                        <p>Реквизиты: будут размещены после подтверждения компанией.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="contact-form-box">
+                        <h3>Получить подробную смету</h3>
+                        <p>Мы свяжемся с вами в ближайшее время для уточнения деталей и расчёта стоимости.</p>
+                        
+                        <div id="form-message" class="form-message"></div>
+                        
+                        <form id="contact-form" action="#" method="POST" novalidate>
+                            <div class="form-group">
+                                <label for="form-name">Ваше имя</label>
+                                <input type="text" id="form-name" name="name" placeholder="Иван" required autocomplete="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="form-phone">Ваш телефон</label>
+                                <input type="tel" id="form-phone" name="phone" placeholder="+7 (___) ___-__-__" required autocomplete="tel">
+                            </div>
+                            <div class="form-group">
+                                <label for="form-comment">Комментарий</label>
+                                <textarea id="form-comment" name="comment" rows="3" placeholder="Что нужно сделать / изготовить"></textarea>
+                            </div>
+                            <label class="privacy-check">
+                                <input type="checkbox" required>
+                                <span>Нажимая кнопку, я соглашаюсь с <a href="#">политикой обработки персональных данных</a> и <a href="#">политикой конфиденциальности</a>.</span>
+                            </label>
+                            <button type="submit" class="btn" style="width: 100%;">Отправить заявку</button>
+                            
+                            <p class="form-note">
+                                Демонстрационная форма. Проверка заполнения работает,
+                                но отправка заявок и передача данных будут подключены
+                                после согласования с компанией.
+                            </p>
+                        </form>
+                    </div>
+                    
+                    <div class="map-container">
+                        <iframe src="https://yandex.ru/map-widget/v1/?ll=55.9900%2C54.7000&z=16&pt=55.9900,54.7000,pm2rdm" allowfullscreen="true" title="Демонстрационная карта"></iframe>
+                        <p class="map-note">
+                            Точное местоположение предприятия и карта будут
+                            добавлены после подтверждения адреса компанией.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ПОДВАЛ -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Разделы сайта</h4>
+                    <ul>
+                        <li><a href="#top">Главная</a></li>
+                        <li><a href="#about">О компании</a></li>
+                        <li><a href="#services">Услуги</a></li>
+                        <li><a href="#drawings">По чертежам</a></li>
+                        <li><a href="#reviews">Отзывы</a></li>
+                        <li><a href="#faq">Вопрос-ответ</a></li>
+                        <li><a href="#contacts">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Наши услуги</h4>
+                    <ul>
+                        <li><a href="#services">Плазменная резка</a></li>
+                        <li><a href="#services">Фрезеровка</a></li>
+                        <li><a href="#services">Изготовление РВД</a></li>
+                        <li><a href="#services">Металлоконструкции</a></li>
+                        <li><a href="#services">Продажа гидравлики</a></li>
+                        <li><a href="#services">Продажа РТИ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <p>Адрес: будет подтверждён после согласования.</p>
+                    <p>Телефон: будет добавлен после согласования.</p>
+                    <p>WhatsApp и Telegram: ссылки будут добавлены после согласования.</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; <span id="current-year">2024</span> Компания «Феникс». Все права защищены.</p>
+                <div style="margin-top: 10px;">
+                    <a href="#">Политика конфиденциальности</a> | 
+                    <a href="#">Согласие на обработку персональных данных</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Плавающая кнопка (демо-режим) -->
+    <button type="button" class="float-whatsapp" onclick="alert('Ссылка на WhatsApp будет добавлена после согласования с компанией.');" aria-label="Связаться (демо)">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1s-.8 1-1 1.2c-.2.2-.4.2-.7.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.7.1-.2.5-.6.7-.8.2-.2.2-.4.1-.7 0-.1-.7-1.7-.9-2.3-.2-.5-.4-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.8s1.2 3.2 1.4 3.4c.2.2 2.3 3.6 5.7 4.9 3.4 1.3 3.4.9 4 .8.6-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.2-.6-.4z"/>
+        </svg>
+    </button>
+
+    <!-- МОДАЛЬНОЕ ОКНО -->
+    <div id="callbackModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-content">
+            <button type="button" class="modal-close" onclick="closeModal()" aria-label="Закрыть">&times;</button>
+            <h3 id="modal-title">Заказать обратный звонок</h3>
+            <p>Оставьте ваш номер, и мы перезвоним вам в ближайшее время.</p>
+            <form id="callback-form" novalidate>
+                <div class="form-group">
+                    <label for="modal-name">Ваше имя</label>
+                    <input type="text" id="modal-name" name="name" placeholder="Иван" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="modal-phone">Ваш телефон</label>
+                    <input type="tel" id="modal-phone" name="phone" placeholder="+7 (___) ___-__-__" required autocomplete="tel">
+                </div>
+                <label class="privacy-check">
+                    <input type="checkbox" required>
+                    <span>Я согласен с <a href="#">политикой обработки данных</a>.</span>
+                </label>
+                
+                <div id="callback-message" class="form-message" role="status" aria-live="polite"></div>
+                
+                <button type="submit" class="btn" style="width: 100%;">Жду звонка</button>
+                
+                <p class="form-note">
+                    Подключение обратного звонка и обработка заявок
+                    будут настроены после согласования с компанией.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ЛАЙТБОКС -->
+    <div id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Просмотр фотографии">
+        <button type="button" class="lightbox-close" onclick="closeLightbox()" aria-label="Закрыть">&times;</button>
+        <img id="lightbox-img" src="" alt="">
+        <p id="lightbox-caption"></p>
+    </div>
+
+    <script>
+        // === 1. ДИНАМИЧЕСКИЙ ГОД ===
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // === 2. МОБИЛЬНОЕ МЕНЮ ===
+        const burger = document.querySelector('.burger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        function toggleMenu() {
+            const isOpen = mobileMenu.classList.toggle('active');
+            burger.setAttribute('aria-expanded', isOpen);
+        }
+        
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                burger.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // === 3. FAQ АККОРДЕОН ===
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                const parent = item.parentElement;
+                const isActive = parent.classList.toggle('active');
+                item.setAttribute('aria-expanded', isActive);
+            });
+        });
+
+        // === 4. МОДАЛЬНОЕ ОКНО ===
+        const modal = document.getElementById('callbackModal');
+        let lastFocusedElement = null;
+        
+        function openModal() {
+            lastFocusedElement = document.activeElement;
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+            
+            setTimeout(() => document.getElementById('modal-name').focus(), 100);
+            trapFocus(modal);
+        }
+        
+        function closeModal() {
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+            
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
+            }
+        }
+        
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) { closeModal(); }
+        });
+
+        // === 5. ЛАЙТБОКС ===
+        const lightbox = document.getElementById('lightbox');
+        let lastFocusedLightbox = null;
+        
+        function openLightbox(event, src, caption) {
+            event.preventDefault();
+            lastFocusedLightbox = document.activeElement;
+            lightbox.style.display = 'flex';
+            lightbox.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+            
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-img').alt = caption;
+            document.getElementById('lightbox-caption').innerText = caption;
+            
+            setTimeout(() => lightbox.querySelector('.lightbox-close').focus(), 100);
+            trapFocus(lightbox);
+        }
+        
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+            lightbox.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+            
+            if (lastFocusedLightbox) {
+                lastFocusedLightbox.focus();
+            }
+        }
+        
+        lightbox.addEventListener('click', function(event) {
+            if (event.target === lightbox) { closeLightbox(); }
+        });
+
+        // === 6. ЛОВУШКА ФОКУСА (без накопления обработчиков) ===
+        function trapFocus(element) {
+            if (element.dataset.trapFocus === 'true') return;
+            element.dataset.trapFocus = 'true';
+            
+            element.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    const focusable = element.querySelectorAll(
+                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                    );
+                    if (focusable.length === 0) return;
+                    
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+                    
+                    if (e.shiftKey && document.activeElement === first) {
+                        e.preventDefault();
+                        last.focus();
+                    } else if (!e.shiftKey && document.activeElement === last) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                }
+            });
+        }
+
+        // === 7. ЗАКРЫТИЕ ПО ESC ===
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (modal.style.display === 'flex') closeModal();
+                if (lightbox.style.display === 'flex') closeLightbox();
+            }
+        });
+
+        // === 8. ВАЛИДАЦИЯ ОСНОВНОЙ ФОРМЫ ===
+        const contactForm = document.getElementById('contact-form');
+        const formMessage = document.getElementById('form-message');
+        
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('form-name');
+            const phoneInput = document.getElementById('form-phone');
+            const privacyCheckbox = contactForm.querySelector('.privacy-check input');
+            
+            nameInput.classList.remove('error');
+            phoneInput.classList.remove('error');
+            formMessage.className = 'form-message';
+            formMessage.textContent = '';
+            
+            let hasError = false;
+            
+            if (nameInput.value.trim().length < 2) {
+                nameInput.classList.add('error');
+                hasError = true;
+            }
+            
+            const phoneDigits = phoneInput.value.replace(/\D/g, '');
+            if (phoneDigits.length < 10) {
+                phoneInput.classList.add('error');
+                hasError = true;
+            }
+            
+            if (!privacyCheckbox.checked) {
+                hasError = true;
+            }
+            
+            if (hasError) {
+                formMessage.className = 'form-message error';
+                formMessage.textContent = 'Пожалуйста, проверьте правильность заполнения полей.';
+                return;
+            }
+            
+            formMessage.className = 'form-message success';
+            formMessage.textContent = 'Демонстрационный режим: форма заполнена корректно. Заявка пока не отправлена, отправка будет подключена после согласования с компанией.';
+        });
+
+        // === 9. ДЕМОНСТРАЦИОННАЯ ФОРМА ОБРАТНОГО ЗВОНКА ===
+        const callbackForm = document.getElementById('callback-form');
+        const callbackMessage = document.getElementById('callback-message');
+
+        callbackForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nameInput = document.getElementById('modal-name');
+            const phoneInput = document.getElementById('modal-phone');
+            const privacyCheckbox = callbackForm.querySelector('.privacy-check input');
+
+            nameInput.classList.remove('error');
+            phoneInput.classList.remove('error');
+
+            callbackMessage.className = 'form-message';
+            callbackMessage.textContent = '';
+
+            let hasError = false;
+
+            if (nameInput.value.trim().length < 2) {
+                nameInput.classList.add('error');
+                hasError = true;
+            }
+
+            const phoneDigits = phoneInput.value.replace(/\D/g, '');
+
+            if (phoneDigits.length < 10) {
+                phoneInput.classList.add('error');
+                hasError = true;
+            }
+
+            if (!privacyCheckbox.checked) {
+                hasError = true;
+            }
+
+            if (hasError) {
+                callbackMessage.className = 'form-message error';
+                callbackMessage.textContent = 'Пожалуйста, проверьте имя, телефон и согласие на обработку данных.';
+                return;
+            }
+
+            callbackMessage.className = 'form-message success';
+            callbackMessage.textContent = 'Демонстрационный режим: данные проверены, но заявка не отправлена и не сохранена.';
+        });
+
+        // === 10. ДЕМО-ЗАГРУЗКА ЧЕРТЕЖЕЙ ===
+        const drawingInput = document.getElementById('drawing-files');
+        const drawingStatus = document.getElementById('drawing-file-status');
+        
+        if (drawingInput && drawingStatus) {
+            drawingInput.addEventListener('change', function () {
+                const files = Array.from(this.files);
+                const maxSize = 10 * 1024 * 1024;
+                
+                if (files.some(file => file.size > maxSize)) {
+                    drawingStatus.textContent = 'Ошибка: размер одного из файлов превышает 10 МБ.';
+                    this.value = '';
+                    return;
+                }
+                
+                if (files.length === 0) {
+                    drawingStatus.textContent = 'Файлы не выбраны.';
+                    return;
+                }
+                
+                drawingStatus.textContent = 'Выбрано файлов: ' + files.length + '. Демонстрационный режим: файлы не отправлены и не сохранены.';
+            });
+        }
+    </script>
+
+</body>
+</html>
